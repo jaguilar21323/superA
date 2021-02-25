@@ -75,7 +75,7 @@ Mq = .25*rho*u0*cbar^(-2)*Cmq;
 Mdotw = .25*rho*u0*cbar^(-2)*Cmalphadot; 
 
 
-%% Z derivatives 
+%% Z derivatives this is where i like to edit things 
 Czu = -2 * Cl - Clu ; % pamadi eqn 4.439
 Czalpha = -Clalpha; 
 Czq = -Clq;
