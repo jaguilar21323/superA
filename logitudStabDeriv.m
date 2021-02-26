@@ -1,7 +1,8 @@
 %% X Z M vs u w q dotw
 % FLIGHT CONDITION: M = 2 (cruise), h = 45000 ft, rho = 0.0149 lb/ft^3, 
 % n = 1, a = 967.7 ft/s
-
+syms 
+dw
 %% Constants
 h = 45000; % ft, altitude
 ge = 32.17; % ft/s^2, gravity at sea level
@@ -27,7 +28,7 @@ W = 80000; % kg, guess for now, have to find what the weight would be around the
 u0 = M*a; % velocity at flight condition
 q = 0.5*rho*u0^2; % dynamic pressure
 n = 1; % load factor at cruise is 1
-dw = ; % downwash
+%dw = ; % downwash % lets put this under syms due to time constraint 
 Cl = n*W/(q*S); % lift coefficient at flight condition
 
 %% Graph CdvM
