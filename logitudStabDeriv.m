@@ -19,12 +19,12 @@ Sh = 124.4; % ft^2, surface area of horizontal stab
 A = 3.5; % aspect ratio
 xw = 50.25; % ft, distance from CG to quarter MAC
 e = 0.97; % Oswald's Efficiency Factor
-VH = ; % Horizontal Tail Volume Coefficient
+VH = 0.48; % Horizontal Tail Volume Coefficient
 swc4 = 31.95; % quarter chord sweep of wing in degrees
 Kw = 0.7; % roskam vi fig 10.40
 a = 967.7; % speed of sound at flight condition
 M = 2; % mach at flight condition
-W = 80000; % kg, guess for now, have to find what the weight would be around the time cruise starts
+W = 80000; % lb, guess for now, have to find what the weight would be around the time cruise starts
 u0 = M*a; % velocity at flight condition
 q = 0.5*rho*u0^2; % dynamic pressure
 n = 1; % load factor at cruise is 1
@@ -44,9 +44,7 @@ Cd2p2 = 0.0211 + 0.4717*Cl^2;
 Cd = [ Cd85 Cd9 Cd95 Cd1p2 Cd1p4 Cd1p6 Cd1p8 Cd2 Cd2p2 ];
 Ma = [ 0.85 0.90 0.95 1.2 1.4 1.6 1.8 2.0 2.2 ];
 plot(Ma,Cd)
-p = polyfit(M,Cd,3);
-k = polyder(p);
-CdvM = polyval(k,M);
+CdvM = (Cd2p2-Cd1p8)/(2.2-1.8);
 Cd = Cd2; % drag used at flight cond of M=2
 
 %% xacvM is found through interpolating data from Fig. 100 in roskam vi
@@ -71,8 +69,8 @@ Cdalphadot = 0;
 %% M derivatives
 Cmu = -Cl*xacvM*M; % roskam vi eqn 10.12 (xacvM = slope of xac v M)
 Cmalpha = -1.4; % from PDR.10
-a1 = A*(2(xw/cbar)^2+.5*(xw/cbar))/(A+2*cosd(swc4)); % split Cmqw0 into multiple components bc long
-a2 = A^3(tand(swc4)^2)/(24*(A+6*cosd(swc4));
+a1 = A*(2*(xw/cbar)^2+.5*(xw/cbar))/(A+2*cosd(swc4)); % split Cmqw0 into multiple components bc long
+a2 = A^3*(tand(swc4)^2)/(24*(A+6*cosd(swc4));
 Cmqw0 = -Kw*ClalphaW*cosd(swc4)*(a1+a2+1/8);
 Cmwh = -2*(ClalphaH)*nH*VH*(xbarACH-xbarCG);
 Cmqw = Cmqw0*((A^3*tand(swc4)^2/(A*B+6*cosd(swc4))+3/B)/(A^3*tand(swc4)^2/(A + 6*cosd(swc4))+3));
