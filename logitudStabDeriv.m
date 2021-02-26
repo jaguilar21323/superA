@@ -98,7 +98,7 @@ Zwdot = .25*rho*cbar*S*Czalphadot;
 Cxu = -2 * Cd - Cdu; % eqn 4.432 pamadi
 Cxalpha = Cl-2*Cl*Clalpha/(pi*S*e); % etkin eqt 5.2,2
 Cxq = -Cdq; % pamadi eqn 4.456
-Cxdotalpha = -Cdalphadot; % pamadi eqn 4.455
+Cxalphadot = -Cdalphadot; % pamadi eqn 4.455
 
 Xu = rho*u0*S*Cw0*sin(theta0) + .5*rho*u0*S*Cxu; 
 Xw = .5*rho*u0*S*Cxalpha; 
