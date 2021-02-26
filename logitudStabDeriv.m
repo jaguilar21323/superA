@@ -3,29 +3,34 @@
 % n = 1, a = 967.7 ft/s
 
 %% Constants
-g = ; % gravity at 45000 ft
-theta0 = 0; % Euler angle for rotation to final elevation
+h = 45000; % ft, altitude
+ge = 32.17; % ft/s^2, gravity at sea level
+R = 2.0926e7; % ft, radius of earth
+g = ge*(R/R+h)^2; % gravity at 45000 ft
+theta0 = 0; % pitch angle
 rho = 0.0149;
-cbar = 165; % ft, mean aero dynamic chord
-cbarh = 55; % ft
+cbar = 165; % ft, mean aerodynamic chord of wing
+cbarh = 55; % ft, mean aerodynamic chord of horizontal tail
+xbarACH = 694/cbar; % distance betw root leading edge and AC
+xbarCG = 4.75/cbar; % distance betw root leading edge and CG
 S = 1281; % ft^2, surface area of wing 
 Sh = 124.4; % ft^2, surface area of horizontal stab
 A = 3.5; % aspect ratio
-xw = ; % distance from
-e = ; % Oswald's Efficiency Factor
+xw = ; % distance from CG to quarter MAC
+e = 0.97; % Oswald's Efficiency Factor
 VH = ; % Horizontal Tail Volume Coefficient
-swc4 = ; % quarter chord sweep of wing in degrees
+swc4 = 31.95; % quarter chord sweep of wing in degrees
+Kw = 0.7; % roskam vi fig 10.40
 a = 967.7; % speed of sound at flight condition
 M = 2; % mach at flight condition
 W = 80000; % kg, guess for now, have to find what the weight would be around the time cruise starts
 u0 = M*a; % velocity at flight condition
-q = 0.5*rho*u0^2;
-n = 1;
+q = 0.5*rho*u0^2; % dynamic pressure
+n = 1; % load factor at cruise is 1
 dw = ; % downwash
 Cl = n*W/(q*S); % lift coefficient at flight condition
-Cd = ; % drag coefficient at flight condition
 
-%% Graph CdvM and xacvM
+%% Graph CdvM
 Cd85 = 0.0105 + 0.2457*Cl^2;
 Cd9 = 0.0113 + 0.2387*Cl^2;
 Cd95 = 0.0175 + 0.2299*Cl^2;
@@ -33,7 +38,7 @@ Cd1p2 = 0.0221 + 0.2128*Cl^2;
 Cd1p4 = 0.0243 + 0.2392*Cl^2;
 Cd1p6 = 0.0271 + 0.2907*Cl^2;
 Cd1p8 = 0.0241 + 0.3636*Cl^2;
-Cd2 = 0.0223 + 0.4149*Cl^2;
+Cd2 = 0.0223 + 0.4149*Cl^2; 
 Cd2p2 = 0.0211 + 0.4717*Cl^2;
 Cd = [ Cd85 Cd9 Cd95 Cd1p2 Cd1p4 Cd1p6 Cd1p8 Cd2 Cd2p2 ];
 Ma = [ 0.85 0.90 0.95 1.2 1.4 1.6 1.8 2.0 2.2 ];
@@ -41,15 +46,19 @@ plot(Ma,Cd)
 p = polyfit(M,Cd,3);
 k = polyder(p);
 CdvM = polyval(k,M);
+Cd = Cd2; % drag used at flight cond of M=2
+
+%% xacvM is found through interpolating data from Fig. 100 in roskam vi
+xacvM = 0.64;
 
 %% Other Eqts that are for other stuff that we r gonna usel8r oh god plz stop the pain i hate stability 
 B = sqrt(1-M^2*cosd(swc4)^2);
 Clu = M^2*cosd(swc4)^2*Cl/(1-M^2*cosd(swc4)^2);
 ClqW0 = ClalphaW*(0.5+2*xw/cbar);
-ClqW = ClqW0*(A+2cosd(swc4))/(A*B+2*cosd(swc4));
+ClqW = ClqW0*(A+2*cosd(swc4))/(A*B+2*cosd(swc4));
 ClqH = 2*ClalphaH*nH*VH;
 Clq = ClqW+ClqH;
-Clalpha = ; % Bens studies (lift curve slope of whole plane)
+Clalpha = 0.44; % Bens studies (lift curve slope of whole plane)
 ClalphaW = ; % lift curve slope of wing
 ClalphaH = ; % lift curve slope of horizontal tail
 Clalphadot = 2*ClalphaH*nH*VH*dw; % at some point, roskam says to go to Ref. 9 for supersonic methods since this is just for subsonic 
